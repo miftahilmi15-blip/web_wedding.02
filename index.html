@@ -12,168 +12,114 @@
     
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#000; overflow:hidden; font-family:'Montserrat', sans-serif; color:white; }
+
+        /* SCENE CONTAINER */
+        #scene-container { position:fixed; inset:0; perspective:1000px; overflow:hidden; }
+
+        /* LAYERS */
+        .layer { position:absolute; inset:0; background-size:cover; background-position:center; will-change:transform; }
         
-        body { 
-            background:#000; 
-            height:100vh; width:100vw; 
-            overflow:hidden; 
-            font-family: 'Montserrat', sans-serif;
-            color: white;
-            display: flex; justify-content: center; align-items: center;
+        .layer-bg { 
+            background:url('background-pelaminan.png') center/cover no-repeat; 
+            transform:translateZ(-200px) scale(1.2); 
+            z-index:10; 
         }
 
-        /* 1. LAYAR FULL - Tanpa Hitam-Hitam */
-        #scene-container {
-            position: fixed; inset: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
-            /* Memberi kesan ruang 3D */
-            perspective: 1000px;
+        .layer-couple { 
+            background:url('mempelai.png') center/contain no-repeat; 
+            transform:translateZ(50px) scale(1.1); 
+            z-index:20; 
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5)); 
         }
 
-        /* --- KONFIGURASI LAYER PARALLAX (Manusia Hidup) --- */
-        .layer {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%;
-            background-size: cover; background-position: center bottom;
-            background-repeat: no-repeat;
-            will-change: transform; /* Optimasi performance */
+        #pixi-canvas { position:absolute; inset:0; z-index:15; }
+
+        .light-sweep { 
+            position:absolute; width:200%; height:100%; top:0; left:-100%; 
+            background:linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent); 
+            z-index:25; pointer-events:none; 
         }
 
-        /* Layer 1: Background Pelaminan (Bergerak Paling Sedikit) */
-        .layer-bg {
-            background-image: url('background-pelaminan.png');
-            z-index: 10;
-            transform: translateZ(-200px) scale(1.2);
+        /* UI OVERLAY */
+        .ui-overlay { 
+            position:fixed; bottom:0; width:100%; height:35%; 
+            display:flex; flex-direction:column; justify-content:center; align-items:center; 
+            background:linear-gradient(to top, rgba(0,0,0,0.85), transparent); 
+            z-index:100; 
         }
 
-        /* Layer 2: Mempelai (Manusia - Bergerak Lebih Banyak biar Hidup) */
-        .layer-couple {
-            background-image: url('mempelai.png');
-            z-index: 20;
-            transform: translateZ(50px) scale(1.1);
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+        .title { font-family:'Great Vibes', cursive; font-size:3rem; color:#ec407a; margin-bottom:10px; }
+        .date-text { font-size:0.9rem; margin-bottom:20px; }
+        .btn { 
+            padding:15px 40px; border:none; border-radius:50px; 
+            background:linear-gradient(45deg,#ad1457,#ec407a); color:white; 
+            cursor:pointer; letter-spacing:2px; transition:0.3s;
         }
+        .btn:hover { transform:scale(1.05); filter:brightness(1.2); }
 
-        /* 2. ELEMENT HIDUP - Partikel & Cahaya Mewah (Pixi.js Canvas) */
-        #pixi-canvas {
-            position: absolute; inset: 0;
-            z-index: 15; /* Di antara BG dan Mempelai */
-            pointer-events: none;
-        }
-
-        /* --- UI OVERLAY (Teks & Tombol) --- */
-        .ui-overlay {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 35%;
-            z-index: 100; /* Paling depan */
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            padding: 20px; text-align: center;
-        }
-
-        .title { 
-            font-family:'Great Vibes', cursive; font-size: 3rem; 
-            color: #ad1457; margin-bottom: 15px;
-            text-shadow: 0 5px 15px rgba(173,20,87,0.3);
-            letter-spacing: 1px;
-        }
-
-        .date-text { font-size: 0.9rem; font-weight: 300; letter-spacing: 2px; margin-bottom: 30px; }
-
-        .btn {
-            padding: 15px 40px; border-radius: 50px; border: none; cursor: pointer;
-            background: linear-gradient(45deg, #ad1457, #ec407a);
-            color: white; font-weight: 600; text-transform: uppercase;
-            font-size: 0.8rem; letter-spacing: 3px;
-            box-shadow: 0 10px 30px rgba(236, 64, 122, 0.4);
-            transition: 0.3s ease;
-        }
-        .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 40px rgba(236, 64, 122, 0.6); }
-
-        /* Animation Masuk Mulus */
-        .fade-in { opacity: 0; animation: fadeInMulus 2s forwards; }
-        @keyframes fadeInMulus { to { opacity: 1; } }
-
+        .fade-in { opacity:0; animation:fadeIn 2s forwards; }
+        @keyframes fadeIn { to { opacity:1; } }
     </style>
 </head>
 <body>
 
     <div id="scene-container">
         <div class="layer layer-bg fade-in" id="bg"></div>
-        
         <canvas id="pixi-canvas"></canvas>
-
         <div class="layer layer-couple fade-in" id="couple"></div>
+        <div class="light-sweep"></div>
     </div>
 
     <div class="ui-overlay fade-in">
         <h1 class="title">Samira & Murad</h1>
         <p class="date-text">Sabtu, 14 Februari 2026</p>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wedding Samira & Murad</title>
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { background: #8b5e83; /* Warna cadangan jika gambar telat loading */ height: 100vh; overflow: hidden; }
-
-        /* Container Fullscreen */
-        .full-screen {
-            position: fixed; inset: 0;
-            width: 100vw; height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-        }
-
-        /* Gambar Pelaminan (Dibuat Fullscreen) */
-        .bg-img {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%;
-            background: url('pelaminan-syari.png') center/cover no-repeat;
-            z-index: 1;
-            /* Efek Zoom pelan agar tidak mati */
-            animation: slowZoom 20s ease-in-out infinite alternate;
-        }
-
-        @keyframes slowZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.15); }
-        }
-
-        /* Efek Sparkle Ringan (CSS saja biar tidak berat) */
-        .sparkle-layer {
-            position: absolute; inset: 0; z-index: 2;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: moveSparkle 15s linear infinite;
-        }
-
-        @keyframes moveSparkle { from { background-position: 0 0; } to { background-position: 100px 100px; } }
-
-        /* Overlay */
-        .overlay {
-            position: absolute; bottom: 0; width: 100%; height: 40%;
-            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-            z-index: 3; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; color: white;
-        }
-
-        button {
-            padding: 15px 40px; border-radius: 30px; border: none;
-            background: #fff; color: #ad1457; font-weight: bold; cursor: pointer;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="full-screen">
-        <div class="bg-img"></div>
-        <div class="sparkle-layer"></div>
-        <div class="overlay">
-            <h1 style="font-family:cursive;">Samira & Murad</h1>
-            <button onclick="window.location.href='profil.html'">BUKA UNDANGAN</button>
-        </div>
+        <button class="btn" onclick="buka()">BUKA UNDANGAN</button>
     </div>
+
+    <script>
+        // 1. PARALLAX ENGINE
+        const bg = document.getElementById('bg');
+        const couple = document.getElementById('couple');
+
+        function move(x, y) {
+            gsap.to(bg, { x: x * 10, y: y * 10, duration: 1, ease: "power2.out" });
+            gsap.to(couple, { x: x * 30, y: y * 30, duration: 1, ease: "power2.out" });
+        }
+
+        window.addEventListener('mousemove', e => {
+            let x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+            let y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+            move(x, y);
+        });
+
+        // 2. ANIMATIONS
+        gsap.to("#couple", { y: 15, duration: 3, repeat: -1, yoyo: true, ease: "power1.inOut" });
+        gsap.to("#scene-container", { x: 10, y: 5, duration: 6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        gsap.to(".light-sweep", { x: "100%", duration: 5, repeat: -1, ease: "none" });
+
+        // 3. PIXI PARTICLES
+        const app = new PIXI.Application({ view: document.getElementById("pixi-canvas"), width: window.innerWidth, height: window.innerHeight, backgroundAlpha: 0 });
+        let particles = [];
+        for(let i=0; i<60; i++) {
+            let p = new PIXI.Graphics();
+            p.beginFill(0xffffff); p.drawCircle(0, 0, Math.random() * 2 + 1); p.endFill();
+            p.x = Math.random() * app.screen.width; p.y = Math.random() * app.screen.height;
+            p.speed = Math.random() * 0.5 + 0.2;
+            app.stage.addChild(p);
+            particles.push(p);
+        }
+        app.ticker.add(() => {
+            particles.forEach(p => {
+                p.y -= p.speed;
+                if(p.y < 0) p.y = app.screen.height;
+            });
+        });
+
+        // 4. NAVIGATION
+        function buka() {
+            gsap.to("body", { opacity: 0, duration: 0.8, onComplete: () => { window.location.href = "profil.html"; }});
+        }
+    </script>
 </body>
 </html>
