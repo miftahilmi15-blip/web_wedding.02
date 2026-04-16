@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Syar'i Digital - Samira & Murad</title>
+    <title>Wedding Invitation - Samira & Murad</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+
     <style>
-        /* --- CSS RESET & BASE --- */
+        /* CSS Dasar & Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            /* Background Luar Frame: Netral Ivory Gradient (Sesuai Prompt) */
+            /* Background Luar Frame: Ivory Gradient (Sesuai Prompt) */
             background: radial-gradient(circle, #fff 0%, #f5f5f0 100%);
             font-family: 'Montserrat', sans-serif; 
             overflow: hidden; height: 100vh; width: 100vw;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1000px; /* Penting untuk efek 3D Parallax */
+            perspective: 1000px; /* Penting untuk efek Parallax */
         }
 
-        /* --- CONTAINER UTAMA (HERO SECTION) --- */
-        .hero-wrapper {
+        /* --- CONTAINER UTAMA (EFEK LAYER 3D) --- */
+        .wrapper {
             position: relative;
             width: 350px; height: 600px; /* Ukuran Portrait HP Mewah */
             border-radius: 40px;
@@ -32,48 +32,48 @@
             opacity: 0; transform: scale(0.9);
         }
 
-        /* --- 1. DEKORASI BUNGA MENJUNTAI (Pojok Atas) --- */
-        .flower-decor {
+        /* --- LAYER 1: DEKORASI BUNGA MENJUNTAI (Paling Depan) --- */
+        .bunga {
             position: absolute; width: 180px; z-index: 50;
             pointer-events: none; opacity: 0;
-            /* Animasi: Tertiuap Angin (Sway) */
+            /* Animasi: Sway (Sesuai Prompt) */
             transform-origin: top;
             animation: sway 6s ease-in-out infinite;
         }
-        .flower-left { top: -20px; left: -30px; }
-        .flower-right { top: -20px; right: -30px; transform: scaleX(-1); /* Mirror */ }
+        .bunga-kiri { top: -20px; left: -30px; }
+        .bunga-kanan { top: -20px; right: -30px; transform: scaleX(-1); /* Mirror */ }
 
-        /* --- 2. INNER FRAME (Suasana Pelaminan Syar'i) --- */
-        .inner-frame {
+        /* --- LAYER 2: AI GENERATED IMAGE (Background Pelaminan) --- */
+        .ai-frame {
             position: absolute; inset: 0;
-            /* Area untuk Hasil Generate AI (Background Pelaminan) */
-            background-image: url('img/pelaminan-ai.png'); 
+            background-image: url('img/pelaminan-syari.png'); 
             background-size: cover; background-position: center;
             z-index: 10;
             /* Efek: Soft Lighting (Hangat, Sakral) */
             filter: sepia(20%) saturate(110%) brightness(105%);
         }
 
-        /* --- 3. PENGANTIN LAYER (Pergerakan Halus/Parallax) --- */
+        /* --- LAYER 3: PENGANTIN (Subtle Zoom-out/Parallax) --- */
         .couple-layer {
             position: absolute; inset: 0;
-            /* Area untuk Hasil Generate AI (Pengantin) */
-            background-image: url('img/pengantin-ai.png');
+            background-image: url('img/pengantin-syari.png');
             background-size: contain; background-repeat: no-repeat; background-position: bottom center;
             z-index: 20;
-            /* Subtle Zoom/Parallax (GSAP) */
+            /* Pergerakan Halus: Subtle Zoom (Sesuai Prompt) */
             transform: scale(1.05);
         }
 
-        /* --- 4. GLASS OVERLAY + TEXT ELEMENTS --- */
+        /* --- LAYER 4: SPARKLE EFFECT (Di Belakang Glass Layer) --- */
+        #sparkle-canvas { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+
+        /* --- LAYER 5: GLASS OVERLAY & CONTENT --- */
         .glass-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            height: 40%; background: rgba(255, 255, 255, 0.1);
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 40%;
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px); border-radius: 0 0 40px 40px;
             z-index: 30;
-            display: flex; flex-direction: column; 
-            justify-content: center; align-items: center;
-            padding: 20px; border-top: 1px solid rgba(255,255,255,0.2);
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; padding: 20px; border-top: 1px solid rgba(255,255,255,0.2);
         }
 
         /* Teks: Kaligrafi & Serif Modern (Sesuai Prompt) */
@@ -91,10 +91,7 @@
         }
         .btn-buka:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(236, 64, 122, 0.4); }
 
-        /* --- 5. SPARKLE & MAGICAL PARTICLES --- */
-        #sparkle-canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
-
-        /* KEYFRAMES */
+        /* Keyframes */
         @keyframes sway {
             0%, 100% { transform: rotate(0deg); }
             50% { transform: rotate(3deg); }
@@ -105,11 +102,11 @@
 
     <canvas id="sparkle-canvas"></canvas>
 
-    <div class="hero-wrapper" id="hero">
-        <img src="img/bunga-kiri.png" class="flower-decor flower-left" id="fl-left">
-        <img src="img/bunga-kanan.png" class="flower-decor flower-right" id="fl-right">
+    <div class="wrapper" id="cover">
+        <img src="img/bunga-kiri.png" class="bunga bunga-kiri" id="fl-left">
+        <img src="img/bunga-kanan.png" class="bunga bunga-kanan" id="fl-right">
 
-        <div class="inner-frame" id="frame-bg"></div>
+        <div class="ai-frame" id="frame-bg"></div>
 
         <div class="couple-layer" id="couple"></div>
 
@@ -127,17 +124,17 @@
             const tl = gsap.timeline();
 
             // 1. Frame muncul dengan efek fade-in & sedikit zoom-in
-            tl.to("#hero", { opacity: 1, scale: 1, duration: 1.5, ease: "power4.out" })
+            tl.to("#cover", { opacity: 1, scale: 1, duration: 1.5, ease: "power4.out" })
             
-            // 2. Dekorasi bunga muncul
-              .to(".flower-decor", { opacity: 1, duration: 1, stagger: 0.3 }, "-=0.5")
+            // 2. Bunga muncul
+              .to(".bunga", { opacity: 1, duration: 1, stagger: 0.3 }, "-=0.5")
               
-            // 3. Visual pengantin & pelaminan memiliki efek pergerakan halus (Subtle Zoom)
+            // 3. Visual pengantin memiliki efek pergerakan halus (Subtle Zoom)
               .to("#frame-bg", { scale: 1.1, duration: 10, ease: "linear", repeat: -1, yoyo: true }, 0)
               .to("#couple", { scale: 1.1, y: -10, duration: 8, ease: "sine.inOut", repeat: -1, yoyo: true }, 0);
         };
 
-        // --- LOGIKA PARTIKEL/SPARKLE (Magical Effect) ---
+        // --- LOGIKA SPARKLE (Canvas-based) ---
         const canvas = document.getElementById('sparkle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -158,24 +155,24 @@
             }
             draw() {
                 ctx.globalAlpha = this.opacity;
-                ctx.fillStyle = '#d4af37'; // Warna Emas Mewah
+                ctx.fillStyle = '#d4af37'; // Emas
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.random() * Math.PI * 2);
                 ctx.fill();
             }
         }
-        function initParticles() { for (let i = 0; i < 50; i++) { particles.push(new Particle()); } }
-        function animateParticles() {
+        function init() { for (let i = 0; i < 50; i++) { particles.push(new Particle()); } }
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
+            requestAnimationFrame(animate);
         }
-        initParticles(); animateParticles();
+        init(); animate();
 
-        // --- FUNGSI NAVIGASI ---
+        // --- NAVIGASI ---
         function startExperience() {
             gsap.to("body", { opacity: 0, duration: 0.8, onComplete: () => {
-                window.location.href = "profil.html"; // Pastikan file ini ada
+                window.location.href = "profil.html"; 
             }});
         }
     </script>
