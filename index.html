@@ -109,83 +109,71 @@
     <div class="ui-overlay fade-in">
         <h1 class="title">Samira & Murad</h1>
         <p class="date-text">Sabtu, 14 Februari 2026</p>
-        <button class="btn" onclick="buka()">BUKA UNDANGAN</button>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wedding Samira & Murad</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background: #8b5e83; /* Warna cadangan jika gambar telat loading */ height: 100vh; overflow: hidden; }
+
+        /* Container Fullscreen */
+        .full-screen {
+            position: fixed; inset: 0;
+            width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Gambar Pelaminan (Dibuat Fullscreen) */
+        .bg-img {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            background: url('pelaminan-syari.png') center/cover no-repeat;
+            z-index: 1;
+            /* Efek Zoom pelan agar tidak mati */
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        /* Efek Sparkle Ringan (CSS saja biar tidak berat) */
+        .sparkle-layer {
+            position: absolute; inset: 0; z-index: 2;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveSparkle 15s linear infinite;
+        }
+
+        @keyframes moveSparkle { from { background-position: 0 0; } to { background-position: 100px 100px; } }
+
+        /* Overlay */
+        .overlay {
+            position: absolute; bottom: 0; width: 100%; height: 40%;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            z-index: 3; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; color: white;
+        }
+
+        button {
+            padding: 15px 40px; border-radius: 30px; border: none;
+            background: #fff; color: #ad1457; font-weight: bold; cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="full-screen">
+        <div class="bg-img"></div>
+        <div class="sparkle-layer"></div>
+        <div class="overlay">
+            <h1 style="font-family:cursive;">Samira & Murad</h1>
+            <button onclick="window.location.href='profil.html'">BUKA UNDANGAN</button>
+        </div>
     </div>
-
-    <script>
-        // --- PART 1: LOGIKA PARALLAX (Bikin Manusia Hidup) ---
-        const scene = document.getElementById('scene-container');
-        const bg = document.getElementById('bg');
-        const couple = document.getElementById('couple');
-
-        // Menangkap gerakan mouse/jari
-        window.addEventListener('mousemove', (e) => {
-            const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
-            const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-            parallaxEffect(x, y);
-        });
-
-        window.addEventListener('touchmove', (e) => {
-            const x = (e.touches[0].clientX - window.innerWidth / 2) / (window.innerWidth / 2);
-            const y = (e.touches[0].clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-            parallaxEffect(x, y);
-        });
-
-        // Bikin pergerakan berbeda antar layer (Efek Kedalaman 3D)
-        function parallaxEffect(x, y) {
-            // Kita pakai GSAP biar transisinya sangat smooth
-            // 1. Layer Background (Bergerak SEDIKIT)
-            gsap.to(bg, { x: x * 10, y: y * 10, duration: 1, ease: "power2.out" });
-            
-            // 2. Layer Couple (Manusia - Bergerak BANYAK biar timbul)
-            gsap.to(couple, { x: x * 30, y: y * 30, duration: 1, ease: "power2.out" });
-        }
-
-
-        // --- PART 2: LOGIKA PARTIKEL HIDUP (Element Hidup pakai Pixi.js) ---
-        const canvas = document.getElementById('pixi-canvas');
-        const app = new PIXI.Application({ view: canvas, width: window.innerWidth, height: window.innerHeight, backgroundAlpha: 0, antialias: true });
-
-        // Buat ribuan cahaya kecil melayang
-        const totalParticles = 60;
-        const particles = [];
-
-        for (let i = 0; i < totalParticles; i++) {
-            const p = new PIXI.Graphics();
-            p.beginFill(0xFFFFFF); // Warna Emas/Putih Mewah
-            p.drawCircle(0, 0, Math.random() * 3 + 1); // Ukuran acak
-            p.endFill();
-            
-            // Posisi & arah acak
-            p.x = Math.random() * app.screen.width;
-            p.y = Math.random() * app.screen.height;
-            p.speed = Math.random() * 0.5 + 0.2;
-            p.alpha = Math.random() * 0.5 + 0.1;
-            
-            app.stage.addChild(p);
-            particles.push(p);
-        }
-
-        // Animasi element hidup (Sparkle melayang pelan)
-        app.ticker.add(() => {
-            particles.forEach(p => {
-                p.y -= p.speed;
-                if (p.y < -10) p.y = app.screen.height + 10;
-            });
-        });
-
-        // Responsif saat layar di-resize
-        window.addEventListener('resize', () => {
-            app.renderer.resize(window.innerWidth, window.innerHeight);
-        });
-
-
-        // --- NAVIGASI ---
-        function buka() {
-            gsap.to("body", { opacity: 0, duration: 0.8, onComplete: () => {
-                window.location.href = "profil.html"; 
-            }});
-        }
-    </script>
 </body>
 </html>
