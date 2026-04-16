@@ -1,208 +1,80 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wedding Invitation | Samira & Murad</title><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script><link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet"><style>
-* { margin:0; padding:0; box-sizing:border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wedding Invitation | Samira & Murad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#000; overflow:hidden; font-family:'Montserrat', sans-serif; color:white; }
 
-body {
-    background:#000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    overflow:hidden;
-    font-family:'Montserrat', sans-serif;
-}
+        /* VIDEO BACKGROUND - FULL SCREEN */
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover; /* Biar video nutup layar tanpa gepeng */
+            z-index: 1;
+        }
 
-/* WRAPPER */
-.wrapper {
-    position:relative;
-    width:320px;
-    height:550px;
-    border-radius:40px;
-    overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,0.6);
-}
+        /* DARK OVERLAY BIAR TEKS KELIATAN */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 2;
+        }
 
-/* CANVAS */
-#bgCanvas {
-    position:absolute;
-    inset:0;
-}
+        /* UI OVERLAY */
+        .ui-content {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            z-index: 3;
+        }
 
-/* PELAMINAN ILUSION */
-.pelaminan {
-    position:absolute;
-    bottom:120px;
-    width:100%;
-    height:200px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
+        .title { font-family:'Great Vibes', cursive; font-size:3rem; color:#ec407a; margin-bottom:10px; }
+        .date-text { font-size:0.9rem; margin-bottom:20px; letter-spacing: 2px; }
 
-/* KURSI */
-.kursi {
-    width:120px;
-    height:100px;
-    background:linear-gradient(135deg,#fff,#e0d4c3);
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.3);
-}
+        .btn {
+            padding:15px 40px; border:none; border-radius:50px;
+            background:linear-gradient(45deg,#ad1457,#ec407a);
+            color:white; cursor:pointer; letter-spacing:2px;
+            transition:0.3s; text-transform: uppercase; font-weight: 600;
+        }
+        .btn:hover { transform:scale(1.05); filter:brightness(1.2); }
+    </style>
+</head>
+<body>
 
-/* FIGURE SIMPLE */
-.figure {
-    position:absolute;
-    bottom:180px;
-    width:30px;
-    height:80px;
-    background:#fff;
-    border-radius:20px;
-}
+    <video class="video-bg" autoplay muted loop playsinline poster="gambar-thumbnail.jpg">
+        <source src="mempelai.mp4" type="video/mp4">
+        Browser Bos tidak mendukung video.
+    </video>
 
-/* PRIA */
-.pria {
-    left:45%;
-    background:#111;
-}
+    <div class="overlay"></div>
 
-/* WANITA */
-.wanita {
-    right:45%;
-    background:#fff;
-}
+    <div class="ui-content">
+        <h1 class="title">Samira & Murad</h1>
+        <p class="date-text">Sabtu, 14 Februari 2026</p>
+        <button class="btn" onclick="buka()">BUKA UNDANGAN</button>
+    </div>
 
-/* FLOATING */
-@keyframes float {
-    0%,100% { transform:translateY(0); }
-    50% { transform:translateY(-10px); }
-}
-
-.figure {
-    animation: float 4s ease-in-out infinite;
-}
-
-/* SPARKLE */
-.sparkle {
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
-    background-size:25px 25px;
-    animation: sparkleMove 10s linear infinite;
-}
-
-@keyframes sparkleMove {
-    from { transform:translateY(0); }
-    to { transform:translateY(-50px); }
-}
-
-/* LIGHT */
-.light {
-    position:absolute;
-    width:200%;
-    height:100%;
-    background:linear-gradient(120deg,transparent,rgba(255,255,255,0.3),transparent);
-    left:-100%;
-}
-
-/* UI */
-.ui {
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:35%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    color:white;
-}
-
-.title {
-    font-family:'Great Vibes';
-    font-size:2.5rem;
-    margin-bottom:10px;
-}
-
-.btn {
-    padding:10px 30px;
-    border:none;
-    border-radius:30px;
-    background:white;
-    color:#ad1457;
-    cursor:pointer;
-}
-</style></head><body><div class="wrapper"><canvas id="bgCanvas"></canvas>
-
-<div class="sparkle"></div>
-<div class="light"></div>
-
-<div class="pelaminan">
-    <div class="kursi"></div>
-</div>
-
-<div class="figure pria"></div>
-<div class="figure wanita"></div>
-
-<div class="ui">
-    <h1 class="title">Samira & Murad</h1>
-    <button class="btn" onclick="buka()">BUKA UNDANGAN</button>
-</div>
-
-</div><script>
-// CANVAS BACKGROUND
-const canvas = document.getElementById("bgCanvas");
-const ctx = canvas.getContext("2d");
-
-canvas.width = 320;
-canvas.height = 550;
-
-let particles = [];
-
-for (let i = 0; i < 60; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2 + 1,
-        speed: Math.random() * 0.5 + 0.2
-    });
-}
-
-function draw() {
-    ctx.fillStyle = "#111";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    ctx.fillStyle = "white";
-    particles.forEach(p=>{
-        ctx.beginPath();
-        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fill();
-
-        p.y -= p.speed;
-        if(p.y < 0) p.y = canvas.height;
-    });
-
-    requestAnimationFrame(draw);
-}
-draw();
-
-// LIGHT SWEEP
-gsap.to(".light", {
-    x: "100%",
-    duration:5,
-    repeat:-1
-});
-
-// BUTTON
-function buka(){
-    gsap.to(".wrapper", {
-        scale:0.8,
-        opacity:0,
-        duration:0.8
-    });
-}
-</script></body>
+    <script>
+        function buka(){
+            // Efek transisi halus ke profil.html
+            document.body.style.opacity = "0";
+            document.body.style.transition = "0.8s";
+            setTimeout(() => { window.location.href = "profil.html"; }, 800);
+        }
+    </script>
+</body>
 </html>
