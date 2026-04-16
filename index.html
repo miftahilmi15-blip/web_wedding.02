@@ -3,73 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samira & Murad | Wedding</title>
+    <title>3D Live Wedding Invitation - Samira & Murad</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
+        /* --- CSS Reset & Base --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #1a1a1a; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        body { 
+            background: #111; /* Latar gelap biar efek partikel & glassnya 'pop out' */
+            font-family: 'Montserrat', sans-serif; 
+            height: 100vh; width: 100vw; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
 
+        /* --- CONTAINER UTAMA (EFEK LAYER 3D) --- */
         .wrapper {
             position: relative;
-            width: 350px; height: 600px;
+            width: 320px; height: 550px; /* Ukuran Portrait HP */
             border-radius: 40px;
+            box-shadow: 0 40px 100px rgba(139, 94, 131, 0.2);
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: #2a2a2a;
         }
 
-        /* Semua layer pakai gambar yang sama */
-        .layer {
+        /* --- 1. WEBGL CANVAS LAYER (Efek Zoom 3D) --- */
+        #webgl-canvas {
             position: absolute; inset: 0;
-            background-image: url('pelaminan-syari.png');
-            background-size: cover;
-            background-position: center;
+            z-index: 10;
         }
 
-        /* 1. LAYER BACKGROUND (Blur) */
-        .bg-blur { filter: blur(10px) brightness(0.6); z-index: 1; }
-
-        /* 2. LAYER MAIN (Gambar Asli) */
-        .main-img { z-index: 2; }
-
-        /* 3. LAYER BUNGA (Potong bagian atas saja) */
-        .bunga-depan {
-            z-index: 3;
-            /* Memotong gambar: hanya menyisakan bagian atas (bunga) */
-            clip-path: inset(0% 0% 85% 0%);
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* Glass Overlay */
-        .glass-overlay {
-            position: absolute; bottom: 0; width: 100%; height: 35%;
-            z-index: 4;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            display: flex; flex-direction: column;
+        /* --- 2. GLASS OVERLAY LAYER (Konten Teks) --- */
+        .glass-content {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            height: 35%; 
+            /* Efek Glassmorphism (Frosty) */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 0 0 40px 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 30; /* Di depan WebGL */
+            display: flex; flex-direction: column; 
             justify-content: center; align-items: center;
-            color: white; text-align: center;
+            padding: 20px;
         }
 
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        /* --- Teks Elemen --- */
+        .couple-name {
+            font-family: 'Great Vibes', cursive; color: #fff;
+            font-size: 2.8rem; text-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .btn-buka {
+            padding: 12px 40px; background: rgba(255,255,255,0.9);
+            color: #8b5e83; border: none; border-radius: 50px; 
+            font-weight: 700; cursor: pointer; text-transform: uppercase;
+            box-spacing: 1px; font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .btn-buka:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
     </style>
 </head>
 <body>
 
     <div class="wrapper">
-        <div class="layer bg-blur"></div>
-        <div class="layer main-img"></div>
-        <div class="layer bunga-depan"></div>
-
-        <div class="glass-overlay">
-            <h1 style="font-family: 'Great Vibes'; font-size: 2.5rem;">Samira & Murad</h1>
-            <button onclick="window.location.href='profil.html'" 
-                    style="padding:10px 30px; border-radius:30px; border:none; cursor:pointer; margin-top:10px;">
-                BUKA UNDANGAN
-            </button>
+        <canvas id="webgl-canvas"></canvas>
+        
+        <div class="glass-content">
+            <h1 class="couple-name">Samira & Murad</h1>
+            <button class="btn-buka" onclick="buka()">BUKA UNDANGAN</button>
         </div>
     </div>
 
+    <script>
+        // --- KONFIGURASI ---
+        const IMAGE_URL = 'pelaminan-syari.png'; // GANTI INI DENGAN NAMA FILE GAMBAR BOS!
+        
+        let scene, camera, renderer, material, mesh, clock;
+        let mouseX = 0, mouseY = 0;
+
+        // --- PART 1: INIT THREE.js ---
+        function initWebGL() {
+            // Setup scene, camera, renderer
+            scene = new THREE.Scene();
+            camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+            camera.position.z = 1;
+            
+            const canvas = document.getElementById('webgl-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setSize(320, 550);
+            
+            clock = new THREE.Clock();
+
+            // Load Texture
+            const textureLoader = new THREE.TextureLoader();
+            const texture = textureLoader.load(IMAGE_URL, () => {
+                // Setelah gambar dimuat, panggil shader material
+                setupShader(texture);
+                animate();
+            });
+        }
+
+        // --- PART 2: SHADER MATERIAL (RAHASIA ZOOM 3D) ---
+        function setupShader(texture) {
+            // Ini adalah rumus matematika (Shader) yang "melukis" efek displacement/zoom 3D
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+            
+            const fragmentShader = `
+                uniform sampler2D tDiffuse;
+                uniform float u_time;
+                uniform vec2 u_mouse;
+                varying vec2 vUv;
+                
+                void main() {
+                    // Membuat 'displacement' halus berdasarkan waktu & mouse
+                    // Bunga di atas (uv.y > 0.7) bergeser lebih lambat/lebih sedikit
+                    // Mempelai di tengah (uv.y 0.3 - 0.7) bergeser lebih banyak (Efek Zoom/Parallax)
+                    
+                    float displacement_x = sin(vUv.y * 3.14159 * 2.0 + u_time * 0.5) * 0.01;
+                    float displacement_y = cos(vUv.x * 3.14159 * 2.0 + u_time * 0.5) * 0.01;
+                    
+                    // Tambahkan efek responsif kursor
+                    displacement_x += (u_mouse.x - 0.5) * 0.02 * vUv.y;
+                    displacement_y += (u_mouse.y - 0.5) * 0.02 * vUv.y;
+                    
+                    vec2 new_uv = vec2(vUv.x + displacement_x, vUv.y + displacement_y);
+                    
+                    // Ambil warna dari tekstur asli berdasarkan uv yang sudah digeser
+                    vec4 color = texture2D(tDiffuse, new_uv);
+                    
+                    gl_FragColor = color;
+                }
+            `;
+            
+            material = new THREE.ShaderMaterial({
+                uniforms: {
+                    tDiffuse: { value: texture },
+                    u_time: { value: 0 },
+                    u_mouse: { value: new THREE.Vector2(0.5, 0.5) }
+                },
+                vertexShader,
+                fragmentShader,
+                transparent: true
+            });
+            
+            mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+            scene.add(mesh);
+        }
+
+        // --- PART 3: ANIMATION LOOP & INTERACTION ---
+        function animate() {
+            requestAnimationFrame(animate);
+            if (material) {
+                material.uniforms.u_time.value = clock.getElapsedTime();
+                // Update posisi mouse/jari
+                material.uniforms.u_mouse.value.set(
+                    mouseX / renderer.domElement.clientWidth,
+                    1 - (mouseY / renderer.domElement.clientHeight)
+                );
+            }
+            renderer.render(scene, camera);
+        }
+
+        // Tracking Mouse/Touch
+        document.querySelector('.wrapper').addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        document.querySelector('.wrapper').addEventListener('touchstart', (e) => {
+            mouseX = e.touches[0].clientX;
+            mouseY = e.touches[0].clientY;
+        });
+
+        // --- NAVIGASI ---
+        function buka() {
+            gsap.to(".wrapper", { opacity: 0, scale: 0.8, duration: 0.8 });
+            setTimeout(() => { window.location.href = "profil.html"; }, 800);
+        }
+
+        // Start WebGL
+        initWebGL();
+
+    </script>
 </body>
 </html>
