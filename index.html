@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Luxury Wedding - Samira & Murad</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background: #fce4ec; 
+            /* 100% CODING BACKGROUND: Efek gradasi radial mewah */
+            background-image: radial-gradient(circle at center, #fff 0%, #f8bbd0 100%);
+            font-family: 'Montserrat', sans-serif; 
+            overflow: hidden;
+            height: 100vh;
+            perspective: 2000px; /* Perspektif sangat dalam untuk efek Pop-out */
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* --- 1. ORNAMEN BUNGA (100% CODING Pakai CSS Shapes) --- */
+        /* Kita bikin dedaunan abstrak melayang di pojok-pojok */
+        .flower-ornament {
+            position: fixed;
+            width: 150px; height: 150px;
+            background: rgba(173, 20, 87, 0.1); /* Pink transparan */
+            border-radius: 50% 0% 50% 0%; /* Bentuk daun abstrak */
+            filter: blur(10px); /* Efek blur agar menyatu */
+            pointer-events: none;
+        }
+        .ornament-1 { top: -30px; left: -30px; transform: rotate(15deg); }
+        .ornament-2 { bottom: -50px; right: -50px; transform: rotate(195deg); width: 200px; height: 200px; }
+        .ornament-3 { top: 50%; left: -80px; transform: translateY(-50%) rotate(-45deg); width: 100px; height: 100px; }
+
+        /* --- 2. CONTAINER SCENE 3D --- */
+        .scene {
+            width: 90%; max-width: 400px; height: 600px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        /* --- 3. FRAME UTAMA (100% CODING FRAME) --- */
+        .profile-card { 
+            position: relative;
+            transform-style: preserve-3d;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 40px; border-radius: 40px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            /* Bayangan untuk efek kedalaman */
+            box-shadow: 0 40px 80px rgba(139, 94, 131, 0.2);
+            text-align: center;
+        }
+
+        /* --- 4. PHOTO PLACEHOLDER (100% CODING KARENA BELUM PUNYA FOTO) --- */
+        /* Kita bikin placeholder bulat mewah */
+        .photo-placeholder {
+            width: 140px; height: 140px; 
+            margin: 0 auto 30px auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fce4ec, #fff);
+            border: 5px solid white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            transform: translateZ(100px); /* KELUAR DARI FRAME */
+            display: flex; justify-content: center; align-items: center;
+            color: #ad1457; font-weight: 600; font-size: 0.8rem;
+        }
+        .photo-placeholder::after {
+            content: '🌸 FOTO DISINI';
+        }
+
+        /* --- 5. TEKS (100% CODING & FONTS) --- */
+        p.wedding-of { 
+            letter-spacing: 4px; font-size: 0.7rem; color: #ad1457; font-weight: 600; 
+            transform: translateZ(50px);
+        }
+
+        h1 { 
+            font-family: 'Great Vibes', cursive; 
+            font-size: 3.5rem; margin: 15px 0 25px; 
+            color: #ad1457;
+            transform: translateZ(120px); /* PALING DEPAN */
+            text-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .guest-info { 
+            font-size: 0.8rem; color: #6d4c67; line-height: 1.6;
+            transform: translateZ(80px);
+        }
+        .guest-info b { color: #ad1457; font-weight: 600; }
+
+        /* --- 6. TOMBOL (100% CODING BUTTON) --- */
+        .btn-container {
+            position: absolute; bottom: 30px; 
+            width: 100%; display: flex; justify-content: center;
+            transform: translateZ(150px); /* Pop-out di depan tombol */
+        }
+
+        .btn-event {
+            padding: 16px 45px; background: #ec407a; color: white;
+            border-radius: 50px; border: none; font-weight: 700;
+            box-shadow: 0 15px 35px rgba(236, 64, 122, 0.4); 
+            cursor: pointer; text-transform: uppercase;
+            letter-spacing: 2px; font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .btn-event:active { transform: scale(0.9); }
+    </style>
+</head>
+<body>
+
+    <div class="flower-ornament ornament-1"></div>
+    <div class="flower-ornament ornament-2"></div>
+    <div class="flower-ornament ornament-3"></div>
+
+    <div class="scene" id="mainScene">
+        <div class="profile-card">
+            
+            <p class="wedding-of">THE WEDDING OF</p>
+            <h1>Samira & Murad</h1>
+
+            <div class="photo-placeholder"></div>
+
+            <div class="guest-info">
+                <p>Kepada Yth:</p>
+                <p>Bapak/Ibu/Saudara/i</p>
+                <p style="font-size: 1.2rem; margin: 10px 0;"><b>Tamu Undangan</b></p>
+                <p>Mohon doa restu di hari bahagia kami.</p>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-event" onclick="next()">BUKA UNDANGAN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            const tl = gsap.timeline();
+
+            // Animasi Masuk Super Smooth
+            tl.from("body", { opacity: 0, duration: 2 })
+              .from(".flower-ornament", { scale: 0, opacity: 0, duration: 1.5, stagger: 0.3, ease: "back.out(1.7)" }, "-=1")
+              .from(".profile-card", { opacity: 0, y: 100, duration: 1.5, ease: "power4.out" }, "-=1")
+              .from(".photo-placeholder", { scale: 0, duration: 1, ease: "back.out(1.7)" }, "-=0.5");
+
+            // INTERAKSI 3D SENSITIF (Tanpa Gambar, tetap kerasa 3D)
+            const scene = document.getElementById('mainScene');
+            
+            const handleMove = (e) => {
+                const xVal = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+                const yVal = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+                
+                // Rotasi Scene
+                const rotateY = (window.innerWidth / 2 - xVal) / 25; 
+                const rotateX = (yVal - window.innerHeight / 2) / 25;
+
+                gsap.to(scene, {
+                    rotationY: rotateY,
+                    rotationX: rotateX,
+                    duration: 0.7,
+                    ease: "power2.out"
+                });
+            };
+
+            window.addEventListener('mousemove', handleMove);
+            window.addEventListener('touchmove', (e) => {
+                handleMove(e);
+                e.preventDefault();
+            }, { passive: false });
+        };
+
+        function next() {
+            gsap.to("body", { opacity: 0, scale: 1.1, duration: 0.8 });
+            setTimeout(() => { window.location.href = "profil.html"; }, 800);
+        }
+    </script>
+</body>
+</html>
