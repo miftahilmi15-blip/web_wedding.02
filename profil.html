@@ -2,42 +2,116 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Profil Cinematic | Widya & Miftah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;900&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background: #ad1457; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Montserrat', sans-serif; }
+        body { 
+            background: radial-gradient(circle at center, #ad1457, #880e4f); 
+            overflow: hidden; display: flex; justify-content: center; align-items: center; 
+            height: 100vh; font-family: 'Montserrat', sans-serif; 
+        }
 
-        .container { position: relative; width: 300px; height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        /* CONTAINER UTAMA (RUANG 3D) */
+        .scene {
+            position: relative;
+            width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            perspective: 1500px; /* Jarak pandang 3D */
+        }
 
-        /* Teks 3D Embossed */
+        /* 1. TEKS SUPER 3D (STAY DI TENGAH) */
+        .static-text {
+            position: absolute; z-index: 20; /* Di depan gambar saat bertemu */
+            display: flex; flex-direction: column; align-items: center;
+            color: white; pointer-events: none; text-align: center;
+        }
+
         .name { 
-            font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #fff;
-            text-shadow: 2px 2px 0 #880e4f, 4px 4px 0 rgba(0,0,0,0.3);
-            margin: 10px 0;
+            font-family: 'Great Vibes', cursive; font-size: 4rem;
+            /* Efek Timbul Super Tebal (5 Layer Shadows) */
+            text-shadow: 
+                1px 1px 0px #880e4f, 
+                2px 2px 0px #ad1457, 
+                3px 3px 0px #61113b, 
+                4px 4px 1px rgba(0,0,0,0.2), 
+                0px 0px 30px rgba(255,255,255,0.3);
+            -webkit-text-stroke: 1px rgba(255,255,255,0.6);
+            line-height: 1.1; margin: 10px 0;
         }
 
-        .parents { color: #ffebee; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; }
+        .ampersand { font-size: 2.5rem; margin: 15px 0; font-weight: bold; }
+        .parents { font-size: 0.6rem; letter-spacing: 4px; font-weight: 900; text-transform: uppercase; opacity: 0.8; }
 
-        /* GAMBAR TANPA KOTAK */
+        /* 2. AREA PERTEMUAN FOTO */
+        .photo-space {
+            position: absolute; width: 300px; height: 300px;
+            transform-style: preserve-3d;
+            z-index: 10; /* Di belakang teks */
+        }
+
+        /* CSS DASAR FOTO */
         .photo {
-            width: 150px; /* Atur ukuran gambar di sini */
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+            position: absolute; width: 160px; height: 160px;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
+            opacity: 0; /* Mulai dari transparan */
         }
+
+        /* WIDYA (Cadar - Dari Kiri) */
+        .widya-photo {
+            background-image: url('widya.png');
+            top: 60px;
+            animation: moveWidya 8s ease-out forwards, lovePulse 2s ease-in-out infinite alternate 8s;
+        }
+
+        /* MIFTAH (Peci - Dari Kanan) */
+        .miftah-photo {
+            background-image: url('gambar.png');
+            top: 60px;
+            animation: moveMiftah 8s ease-out forwards, lovePulse 2s ease-in-out infinite alternate 8s;
+        }
+
+        /* 3. KEYFRAMES ANIMASI "THE MEETING" */
+
+        /* Widya Bergerak ke Tengah */
+        @keyframes moveWidya {
+            0% { transform: translateX(-150px) rotateY(-30deg); opacity: 0; }
+            30% { opacity: 1; }
+            100% { transform: translateX(0px) rotateY(0deg); opacity: 1; } /* Bertemu di 0px */
+        }
+
+        /* Miftah Bergerak ke Tengah */
+        @keyframes moveMiftah {
+            0% { transform: translateX(150px) rotateY(30deg); opacity: 0; }
+            30% { opacity: 1; }
+            100% { transform: translateX(0px) rotateY(0deg); opacity: 1; } /* Bertemu di 0px */
+        }
+
+        /* Efek Pulse (Moment Mesra) Setelah Bertemu */
+        @keyframes lovePulse {
+            0% { filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)) brightness(1); }
+            100% { filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 30px rgba(255,255,255,0.7)) brightness(1.2); }
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="widya.png" class="photo">
-        
-        <h2 class="name">Widya</h2>
-        <p class="parents">Bpk. Warto & Ibu Warti</p>
-        
-        <div style="color:white; margin:10px 0;">&</div>
-        
-        <h2 class="name">Miftah</h2>
-        <p class="parents">Bpk. Kadiya & Ibu Khodijah</p>
-        
-        <img src="gambar.png" class="photo">
+
+    <div class="scene">
+        <div class="static-text">
+            <h2 class="name">Widya</h2>
+            <p class="parents">Bpk. Warto & Ibu Warti</p>
+            <div class="ampersand">&</div>
+            <h2 class="name">Miftah</h2>
+            <p class="parents">Bpk. Kadiya & Ibu Khodijah</p>
+        </div>
+
+        <div class="photo-space">
+            <div class="photo widya-photo"></div>
+            <div class="photo miftah-photo"></div>
+        </div>
     </div>
+
 </body>
 </html>
