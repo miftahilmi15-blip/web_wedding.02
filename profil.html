@@ -3,90 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil 3D</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background: #fff; overflow: hidden; }
+        body { background: #ad1457; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Montserrat', sans-serif; }
 
-        .scene {
-            height: 100vh; width: 100vw;
-            display: flex; justify-content: center; align-items: center;
-            perspective: 1200px;
-            background: radial-gradient(circle at center, #ec407a, #880e4f);
-        }
+        .container { position: relative; width: 300px; height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-        .orbit-container {
-            position: relative;
-            width: 300px; height: 300px;
-            transform-style: preserve-3d;
-            animation: rotateOrbit 25s linear infinite;
-        }
-
-        /* TEKS 3D EFEK */
-        .names-static {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: white;
-            z-index: 10;
-        }
-
+        /* Teks 3D Embossed */
         .name { 
-            font-family: 'Great Vibes', cursive; 
-            font-size: 3.5rem; 
-            /* Trik 3D: Layered Shadows */
-            text-shadow: 2px 2px 0px #ad1457, 4px 4px 0px rgba(0,0,0,0.2), 0px 0px 20px rgba(255,255,255,0.4);
-            letter-spacing: 2px;
-        }
-        
-        .parents { 
-            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 3px; margin-top: 5px;
+            font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #fff;
+            text-shadow: 2px 2px 0 #880e4f, 4px 4px 0 rgba(0,0,0,0.3);
+            margin: 10px 0;
         }
 
-        /* KARAKTER PRESISI */
-        .mempelai-orbit {
-            position: absolute;
-            width: 160px; height: 160px;
-            /* Trik agar tidak kotak: pastikan gambar sudah di-remove bg */
-            background-size: contain; 
-            background-repeat: no-repeat; 
-            background-position: bottom;
-            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.4));
-        }
+        .parents { color: #ffebee; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; }
 
-        .widya-orbit {
-            background-image: url('widya.png');
-            top: 70px; left: 70px;
-            transform: rotateX(90deg) translateZ(180px) rotateX(-90deg);
-        }
-
-        .miftah-orbit {
-            background-image: url('gambar.png');
-            top: 70px; left: 70px;
-            transform: rotateX(90deg) translateZ(-180px) rotateX(-90deg);
-        }
-
-        @keyframes rotateOrbit {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
+        /* GAMBAR TANPA KOTAK */
+        .photo {
+            width: 150px; /* Atur ukuran gambar di sini */
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
         }
     </style>
 </head>
 <body>
-
-    <div class="scene">
-        <div class="orbit-container">
-            <div class="names-static">
-                <h2 class="name">Widya</h2>
-                <p class="parents">Bpk. Warto & Ibu Warti</p>
-                <div style="font-size:1.5rem; margin:5px 0;">&</div>
-                <h2 class="name">Miftah</h2>
-                <p class="parents">Bpk. Kadiya & Ibu Khodijah</p>
-            </div>
-            <div class="mempelai-orbit widya-orbit"></div>
-            <div class="mempelai-orbit miftah-orbit"></div>
-        </div>
+    <div class="container">
+        <img src="widya_transparan.png" class="photo">
+        
+        <h2 class="name">Widya</h2>
+        <p class="parents">Bpk. Warto & Ibu Warti</p>
+        
+        <div style="color:white; margin:10px 0;">&</div>
+        
+        <h2 class="name">Miftah</h2>
+        <p class="parents">Bpk. Kadiya & Ibu Khodijah</p>
+        
+        <img src="miftah_transparan.png" class="photo">
     </div>
 </body>
 </html>
