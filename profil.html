@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Profil Mempelai | Widya & Miftah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background: #fff; font-family: 'Montserrat', sans-serif; color: #444; overflow-x: hidden; }
+
+        /* HERO SECTION */
+        .hero {
+            height: 50vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('pelaminan-syari.png') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        .hero h1 { font-family: 'Great Vibes', cursive; font-size: 3.5rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+
+        /* CONTENT CONTAINER */
+        .container {
+            max-width: 500px;
+            margin: -60px auto 0;
+            padding: 40px 25px;
+            background: white;
+            border-radius: 40px 40px 0 0;
+            box-shadow: 0 -15px 30px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .mempelai-box { margin-bottom: 50px; }
+        .divider { font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #ad1457; margin: 20px 0; }
+        
+        .name { font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: #ad1457; margin-bottom: 5px; }
+        .parents { font-size: 0.9rem; font-weight: 400; color: #666; line-height: 1.5; margin-bottom: 15px; }
+        .bio { font-size: 0.85rem; font-style: italic; color: #888; padding: 0 20px; }
+
+        /* BUTTON */
+        .btn-wa {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 35px;
+            background: linear-gradient(45deg, #ad1457, #ec407a);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(173, 20, 87, 0.2);
+            transition: 0.3s;
+        }
+        .btn-wa:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(173, 20, 87, 0.3); }
+
+        /* ANIMATION */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
+        .appear { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1 class="fade-up">Mempelai</h1>
+    </div>
+
+    <div class="container">
+        <div class="mempelai-box fade-up">
+            <h2 class="name">Widya</h2>
+            <p class="parents">Putri dari Bapak Warto <br> & Ibu Warti</p>
+            <p class="bio">"Wanita yang membawa kesejukan dan kebahagiaan dalam keluarga."</p>
+        </div>
+
+        <div class="divider fade-up">&</div>
+
+        <div class="mempelai-box fade-up">
+            <h2 class="name">Miftah</h2>
+            <p class="parents">Putra dari Bapak Kadiya <br> & Ibu Khodijah</p>
+            <p class="bio">"Pria yang penuh tanggung jawab dan ketulusan dalam melangkah."</p>
+        </div>
+
+        <div class="fade-up">
+            <p style="font-size: 0.8rem; color: #999;">Ungkapkan kebahagiaan Anda</p>
+            <a href="https://wa.me/628123456789" class="btn-wa">KIRIM UCAPAN (WA)</a>
+        </div>
+    </div>
+
+    <script>
+        // Script untuk animasi muncul saat scroll
+        const faders = document.querySelectorAll('.fade-up');
+        const appearOptions = { threshold: 0.2 };
+
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('appear');
+                appearOnScroll.unobserve(entry.target);
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+    </script>
+</body>
+</html>
