@@ -9,108 +9,133 @@
         /* --- RESET & BASIC STYLING --- */
         * { margin:0; padding:0; box-sizing:border-box; outline: none; }
         body { 
-            background: radial-gradient(circle at center, #ad1457, #880e4f); /* Background Mewah */
-            overflow: hidden; /* Anti-Scroll */
+            background: radial-gradient(circle at center, #ad1457, #880e4f);
+            overflow: hidden; 
             display: flex; justify-content: center; align-items: center; 
             height: 100vh; width: 100vw;
             font-family: 'Montserrat', sans-serif; 
-            -webkit-font-smoothing: antialiased; /* Teks Halus di Mac/iOS */
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- CONTAINER UTAMA (3D RUANG) --- */
+        /* --- CONTAINER UTAMA --- */
         .cinematic-scene {
             position: relative;
             width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1500px; /* Jarak Pandang 3D */
+            perspective: 1500px;
             overflow: hidden;
         }
 
-        /* --- 1. TEKS SUPER 3D SOLID (STAY DI TENGAH) --- */
+        /* --- [NEW] EFEK BUNGA JATOH (FALLING PETALS) --- */
+        .petals-container {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            z-index: 5; /* Di belakang foto dan teks */
+            pointer-events: none;
+        }
+
+        .petal {
+            position: absolute;
+            background: #fff; /* Warna kelopak (bisa diganti gambar bunga) */
+            border-radius: 150% 0 150% 150%; /* Bentuk Kelopak Sakura */
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        /* Variasi Ukuran, Posisi, dan Animasi Kelopak */
+        .petal:nth-child(1) { width: 10px; height: 10px; left: 10%; animation-duration: 8s; animation-delay: 0s; }
+        .petal:nth-child(2) { width: 15px; height: 15px; left: 25%; animation-duration: 12s; animation-delay: 2s; }
+        .petal:nth-child(3) { width: 8px; height: 8px; left: 40%; animation-duration: 10s; animation-delay: 4s; }
+        .petal:nth-child(4) { width: 12px; height: 12px; left: 60%; animation-duration: 9s; animation-delay: 0s; }
+        .petal:nth-child(5) { width: 14px; height: 14px; left: 75%; animation-duration: 14s; animation-delay: 1s; }
+        .petal:nth-child(6) { width: 10px; height: 10px; left: 90%; animation-duration: 11s; animation-delay: 3s; }
+        .petal:nth-child(7) { width: 12px; height: 12px; left: 20%; animation-duration: 13s; animation-delay: 5s; }
+        .petal:nth-child(8) { width: 9px; height: 9px; left: 55%; animation-duration: 15s; animation-delay: 2s; }
+        .petal:nth-child(9) { width: 16px; height: 16px; left: 85%; animation-duration: 16s; animation-delay: 6s; }
+        .petal:nth-child(10) { width: 11px; height: 11px; left: 35%; animation-duration: 10s; animation-delay: 1s; }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* --- 1. TEKS SUPER 3D SOLID --- */
         .text-overlay {
             position: absolute;
-            z-index: 20; /* Di depan foto */
+            z-index: 20;
             display: flex; flex-direction: column; align-items: center;
-            color: white; pointer-events: none; /* Tamu gak bisa klik teks */
+            color: white; pointer-events: none;
             text-align: center;
         }
 
         .name { 
-            font-family: 'Great Vibes', cursive; font-size: 4.5rem; /* Ukuran Besar */
-            /* Efek Timbul Super Tebal (6 Layer Shadows) */
+            font-family: 'Great Vibes', cursive; font-size: 4.5rem;
             text-shadow: 
                 1px 1px 0px #880e4f, 
                 2px 2px 0px #ad1457, 
                 3px 3px 0px #61113b, 
                 4px 4px 1px rgba(0,0,0,0.2), 
-                0px 0px 30px rgba(255,255,255,0.4),
-                0px 0px 50px rgba(173, 20, 87, 0.5);
-            /* Garis Pinggir Putih Halus */
+                0px 0px 30px rgba(255,255,255,0.4);
             -webkit-text-stroke: 1.5px rgba(255,255,255,0.7);
             line-height: 1.1; margin: 15px 0;
             will-change: transform, opacity;
         }
 
         .ampersand { font-size: 2.8rem; margin: 20px 0; font-weight: bold; text-shadow: 0 5px 10px rgba(0,0,0,0.3); }
-        
-        .parents { 
-            font-size: 0.6rem; letter-spacing: 5px; font-weight: 900; 
-            text-transform: uppercase; opacity: 0.9;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
+        .parents { font-size: 0.6rem; letter-spacing: 5px; font-weight: 900; text-transform: uppercase; opacity: 0.9; }
 
         /* --- 2. RUANG PERTEMUAN FOTO --- */
         .photo-space {
             position: absolute;
-            width: 320px; height: 320px; /* Wadah Orbit */
+            width: 320px; height: 320px;
             transform-style: preserve-3d;
-            z-index: 10; /* Di belakang teks */
+            z-index: 10;
         }
 
-        /* CSS DASAR FOTO TANPA FRAME */
         .photo {
             position: absolute;
-            width: 160px; height: 160px; /* Ukuran Proporsional */
-            /* Mengambil Bagian Terbaik Foto Tanpa Pecah */
+            width: 160px; height: 160px;
             background-size: cover; background-repeat: no-repeat; background-position: center top;
             filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
-            opacity: 0; /* Mulai dari transparan */
-            will-change: transform, opacity; /* Optimalisasi CPU */
+            opacity: 0;
+            will-change: transform, opacity;
         }
 
-        /* WIDYA (Cadar - Dari Kiri Depan) */
+        /* WIDYA (Cadar - Dari Kiri) */
         .widya-photo {
-            background-image: url('widya.png'); /* GANTI JIKA NAMA FILE BEDA */
+            background-image: url('widya.png');
             top: 60px;
-            /* ANIMASI: 8 detik Bergerak, lalu Love Pulse terus-menerus */
             animation: moveWidya 8s cubic-bezier(0.22, 1, 0.36, 1) forwards, lovePulse 2.5s ease-in-out infinite alternate 8s;
         }
 
-        /* MIFTAH (Peci - Dari Kanan Belakang) */
+        /* MIFTAH (Peci - Dari Kanan) */
         .miftah-photo {
-            background-image: url('gambar.png'); /* GANTI JIKA NAMA FILE BEDA */
+            background-image: url('gambar.png');
             top: 60px;
-            /* ANIMASI: 8 detik Bergerak, lalu Love Pulse terus-menerus */
             animation: moveMiftah 8s cubic-bezier(0.22, 1, 0.36, 1) forwards, lovePulse 2.5s ease-in-out infinite alternate 8s;
         }
 
-        /* --- 3. KEYFRAMES ANIMASI "THE MEETING" --- */
+        /* --- 3. KEYFRAMES ANIMASI "THE MEETING" (DIPERBAIKI) --- */
 
-        /* Widya Bergerak ke Tengah */
+        /* Widya Bergerak ke Kiri Tengah (Gak dempet) */
         @keyframes moveWidya {
             0% { transform: translateX(-180px) rotateY(-20deg); opacity: 0; }
             30% { opacity: 1; }
-            100% { transform: translateX(0px) rotateY(0deg); opacity: 1; } /* Bertemu di 0px */
+            /* Berhenti di -60px (Kasih jarak 60px dari tengah) */
+            100% { transform: translateX(-60px) rotateY(0deg); opacity: 1; }
         }
 
-        /* Miftah Bergerak ke Tengah */
+        /* Miftah Bergerak ke Kanan Tengah (Gak dempet) */
         @keyframes moveMiftah {
             0% { transform: translateX(180px) rotateY(20deg); opacity: 0; }
             30% { opacity: 1; }
-            100% { transform: translateX(0px) rotateY(0deg); opacity: 1; } /* Bertemu di 0px */
+            /* Berhenti di 60px (Kasih jarak 60px dari tengah) */
+            100% { transform: translateX(60px) rotateY(0deg); opacity: 1; }
         }
 
-        /* Efek Pulse (Moment Mesra) Setelah Bertemu */
+        /* Efek Pulse Setelah Bertemu */
         @keyframes lovePulse {
             0% { filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)) brightness(1); }
             100% { filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 40px rgba(255,255,255,0.8)) brightness(1.2); }
@@ -119,14 +144,21 @@
         /* Optimalisasi HP Kecil */
         @media (max-width: 350px) {
             .name { font-size: 3.8rem; }
-            .photo-space { width: 280px; height: 280px; }
             .photo { width: 140px; height: 140px; }
+            /* Sesuaikan jarak di HP kecil */
+            @keyframes moveWidya { 100% { transform: translateX(-50px) rotateY(0deg); opacity: 1; } }
+            @keyframes moveMiftah { 100% { transform: translateX(50px) rotateY(0deg); opacity: 1; } }
         }
     </style>
 </head>
 <body>
 
     <div class="cinematic-scene">
+        
+        <div class="petals-container">
+            <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+        </div>
         
         <div class="text-overlay">
             <h2 class="name">Widya</h2>
