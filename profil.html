@@ -2,57 +2,85 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Profil Mempelai | Widya & Miftah</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background: #fff; font-family: 'Montserrat', sans-serif; color: #333; line-height: 1.6; }
+        body { background: #fff; font-family: 'Montserrat', sans-serif; overflow: hidden; }
 
-        /* HEADER ELEGAN */
-        .header { height: 40vh; background: #ad1457; display: flex; justify-content: center; align-items: center; color: white; }
-        .header h1 { font-family: 'Great Vibes', cursive; font-size: 3rem; }
+        /* SCENE 3D */
+        .scene {
+            height: 100vh; width: 100vw;
+            display: flex; justify-content: center; align-items: center;
+            perspective: 1000px;
+            background: linear-gradient(135deg, #ad1457, #ec407a);
+        }
 
-        /* CONTAINER PROFIL */
-        .container { max-width: 500px; margin: -40px auto 40px; padding: 40px 20px; background: white; border-radius: 40px 40px 0 0; text-align: center; }
+        .orbit-container {
+            position: relative;
+            width: 300px; height: 300px;
+            transform-style: preserve-3d;
+            animation: rotateOrbit 20s linear infinite;
+        }
 
-        .mempelai-card { margin-bottom: 60px; }
-        .name { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ad1457; margin-bottom: 10px; }
-        .parents { font-size: 0.9rem; color: #666; font-weight: 300; margin-bottom: 20px; }
-        .divider { font-size: 2rem; color: #ad1457; margin: 30px 0; }
-        
-        /* FADE IN ANIMATION */
-        .fade-in { opacity: 0; transform: translateY(20px); transition: 1s all ease; }
-        .show { opacity: 1; transform: translateY(0); }
+        /* TEKS NAMA (DI TENGAH) */
+        .names-static {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; color: white;
+            z-index: 10;
+        }
+        .name { font-family: 'Great Vibes', cursive; font-size: 3rem; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .parents { font-size: 0.75rem; font-weight: 300; margin-top: 5px; opacity: 0.9; }
+
+        /* KARAKTER ORBIT */
+        .mempelai-orbit {
+            position: absolute;
+            width: 150px; height: 150px;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            transform-origin: center center;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+        }
+
+        /* WIDYA (Depan) */
+        .widya-orbit {
+            background-image: url('img/widya_transparent.png');
+            top: 50px; left: 75px;
+            transform: rotateX(90deg) translateZ(150px) rotateX(-90deg);
+        }
+
+        /* MIFTAH (Belakang) */
+        .miftah-orbit {
+            background-image: url('img/miftah_transparent.png');
+            top: 50px; left: 75px;
+            transform: rotateX(90deg) translateZ(-150px) rotateX(-90deg);
+        }
+
+        @keyframes rotateOrbit {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Mempelai</h1>
+    <div class="scene">
+        <div class="orbit-container">
+            
+            <div class="names-static">
+                <h2 class="name">Widya</h2>
+                <p class="parents">Putri dari Bpk. Warto & Ibu Warti</p>
+                <div style="font-size:1.2rem; margin:10px 0;">&</div>
+                <h2 class="name">Miftah</h2>
+                <p class="parents">Putra dari Bpk. Kadiya & Ibu Khodijah</p>
+            </div>
+
+            <div class="mempelai-orbit widya-orbit"></div>
+            <div class="mempelai-orbit miftah-orbit"></div>
+
+        </div>
     </div>
 
-    <div class="container">
-        <div class="mempelai-card fade-in">
-            <h2 class="name">Widya</h2>
-            <p class="parents">Putri dari <br> <strong>Bapak Warto & Ibu Warti</strong></p>
-        </div>
-
-        <div class="divider fade-in">&</div>
-
-        <div class="mempelai-card fade-in">
-            <h2 class="name">Miftah</h2>
-            <p class="parents">Putra dari <br> <strong>Bapak Kadiya & Ibu Khodijah</strong></p>
-        </div>
-    </div>
-
-    <script>
-        // Animasi muncul pelan saat dibuka
-        window.addEventListener('load', () => {
-            document.querySelectorAll('.fade-in').forEach((el, index) => {
-                setTimeout(() => { el.classList.add('show'); }, index * 500);
-            });
-        });
-    </script>
 </body>
 </html>
