@@ -3,87 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Profil Cinematic | Widya & Miftah</title>
+    <title>Undangan Digital | Widya & Miftah</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;900&display=swap" rel="stylesheet">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
+        /* --- RESET & BASIC STYLING --- */
+        * { margin:0; padding:0; box-sizing:border-box; outline: none; }
         body { 
-            background: radial-gradient(circle at center, #ad1457, #880e4f); 
-            overflow: hidden; display: flex; justify-content: center; align-items: center; 
-            height: 100vh; font-family: 'Montserrat', sans-serif; 
+            background: radial-gradient(circle at center, #ad1457, #880e4f); /* Background Mewah */
+            overflow: hidden; /* Anti-Scroll */
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; width: 100vw;
+            font-family: 'Montserrat', sans-serif; 
+            -webkit-font-smoothing: antialiased; /* Teks Halus di Mac/iOS */
         }
 
-        /* CONTAINER UTAMA (RUANG 3D) */
-        .scene {
+        /* --- CONTAINER UTAMA (3D RUANG) --- */
+        .cinematic-scene {
             position: relative;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1500px; /* Jarak pandang 3D */
+            perspective: 1500px; /* Jarak Pandang 3D */
+            overflow: hidden;
         }
 
-        /* 1. TEKS SUPER 3D (STAY DI TENGAH) */
-        .static-text {
-            position: absolute; z-index: 20; /* Di depan gambar saat bertemu */
+        /* --- 1. TEKS SUPER 3D SOLID (STAY DI TENGAH) --- */
+        .text-overlay {
+            position: absolute;
+            z-index: 20; /* Di depan foto */
             display: flex; flex-direction: column; align-items: center;
-            color: white; pointer-events: none; text-align: center;
+            color: white; pointer-events: none; /* Tamu gak bisa klik teks */
+            text-align: center;
         }
 
         .name { 
-            font-family: 'Great Vibes', cursive; font-size: 4rem;
-            /* Efek Timbul Super Tebal (5 Layer Shadows) */
+            font-family: 'Great Vibes', cursive; font-size: 4.5rem; /* Ukuran Besar */
+            /* Efek Timbul Super Tebal (6 Layer Shadows) */
             text-shadow: 
                 1px 1px 0px #880e4f, 
                 2px 2px 0px #ad1457, 
                 3px 3px 0px #61113b, 
                 4px 4px 1px rgba(0,0,0,0.2), 
-                0px 0px 30px rgba(255,255,255,0.3);
-            -webkit-text-stroke: 1px rgba(255,255,255,0.6);
-            line-height: 1.1; margin: 10px 0;
+                0px 0px 30px rgba(255,255,255,0.4),
+                0px 0px 50px rgba(173, 20, 87, 0.5);
+            /* Garis Pinggir Putih Halus */
+            -webkit-text-stroke: 1.5px rgba(255,255,255,0.7);
+            line-height: 1.1; margin: 15px 0;
+            will-change: transform, opacity;
         }
 
-        .ampersand { font-size: 2.5rem; margin: 15px 0; font-weight: bold; }
-        .parents { font-size: 0.6rem; letter-spacing: 4px; font-weight: 900; text-transform: uppercase; opacity: 0.8; }
+        .ampersand { font-size: 2.8rem; margin: 20px 0; font-weight: bold; text-shadow: 0 5px 10px rgba(0,0,0,0.3); }
+        
+        .parents { 
+            font-size: 0.6rem; letter-spacing: 5px; font-weight: 900; 
+            text-transform: uppercase; opacity: 0.9;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
-        /* 2. AREA PERTEMUAN FOTO */
+        /* --- 2. RUANG PERTEMUAN FOTO --- */
         .photo-space {
-            position: absolute; width: 300px; height: 300px;
+            position: absolute;
+            width: 320px; height: 320px; /* Wadah Orbit */
             transform-style: preserve-3d;
             z-index: 10; /* Di belakang teks */
         }
 
-        /* CSS DASAR FOTO */
+        /* CSS DASAR FOTO TANPA FRAME */
         .photo {
-            position: absolute; width: 160px; height: 160px;
+            position: absolute;
+            width: 160px; height: 160px; /* Ukuran Proporsional */
+            /* Mengambil Bagian Terbaik Foto Tanpa Pecah */
+            background-size: cover; background-repeat: no-repeat; background-position: center top;
             filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
             opacity: 0; /* Mulai dari transparan */
+            will-change: transform, opacity; /* Optimalisasi CPU */
         }
 
-        /* WIDYA (Cadar - Dari Kiri) */
+        /* WIDYA (Cadar - Dari Kiri Depan) */
         .widya-photo {
-            background-image: url('widya.png');
+            background-image: url('widya.png'); /* GANTI JIKA NAMA FILE BEDA */
             top: 60px;
-            animation: moveWidya 8s ease-out forwards, lovePulse 2s ease-in-out infinite alternate 8s;
+            /* ANIMASI: 8 detik Bergerak, lalu Love Pulse terus-menerus */
+            animation: moveWidya 8s cubic-bezier(0.22, 1, 0.36, 1) forwards, lovePulse 2.5s ease-in-out infinite alternate 8s;
         }
 
-        /* MIFTAH (Peci - Dari Kanan) */
+        /* MIFTAH (Peci - Dari Kanan Belakang) */
         .miftah-photo {
-            background-image: url('gambar.png');
+            background-image: url('gambar.png'); /* GANTI JIKA NAMA FILE BEDA */
             top: 60px;
-            animation: moveMiftah 8s ease-out forwards, lovePulse 2s ease-in-out infinite alternate 8s;
+            /* ANIMASI: 8 detik Bergerak, lalu Love Pulse terus-menerus */
+            animation: moveMiftah 8s cubic-bezier(0.22, 1, 0.36, 1) forwards, lovePulse 2.5s ease-in-out infinite alternate 8s;
         }
 
-        /* 3. KEYFRAMES ANIMASI "THE MEETING" */
+        /* --- 3. KEYFRAMES ANIMASI "THE MEETING" --- */
 
         /* Widya Bergerak ke Tengah */
         @keyframes moveWidya {
-            0% { transform: translateX(-150px) rotateY(-30deg); opacity: 0; }
+            0% { transform: translateX(-180px) rotateY(-20deg); opacity: 0; }
             30% { opacity: 1; }
             100% { transform: translateX(0px) rotateY(0deg); opacity: 1; } /* Bertemu di 0px */
         }
 
         /* Miftah Bergerak ke Tengah */
         @keyframes moveMiftah {
-            0% { transform: translateX(150px) rotateY(30deg); opacity: 0; }
+            0% { transform: translateX(180px) rotateY(20deg); opacity: 0; }
             30% { opacity: 1; }
             100% { transform: translateX(0px) rotateY(0deg); opacity: 1; } /* Bertemu di 0px */
         }
@@ -91,15 +113,22 @@
         /* Efek Pulse (Moment Mesra) Setelah Bertemu */
         @keyframes lovePulse {
             0% { filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)) brightness(1); }
-            100% { filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 30px rgba(255,255,255,0.7)) brightness(1.2); }
+            100% { filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 40px rgba(255,255,255,0.8)) brightness(1.2); }
         }
 
+        /* Optimalisasi HP Kecil */
+        @media (max-width: 350px) {
+            .name { font-size: 3.8rem; }
+            .photo-space { width: 280px; height: 280px; }
+            .photo { width: 140px; height: 140px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="scene">
-        <div class="static-text">
+    <div class="cinematic-scene">
+        
+        <div class="text-overlay">
             <h2 class="name">Widya</h2>
             <p class="parents">Bpk. Warto & Ibu Warti</p>
             <div class="ampersand">&</div>
@@ -108,8 +137,8 @@
         </div>
 
         <div class="photo-space">
-            <div class="photo widya-photo"></div>
-            <div class="photo miftah-photo"></div>
+            <div class="photo widya-orbit widya-photo"></div>
+            <div class="photo miftah-orbit miftah-photo"></div>
         </div>
     </div>
 
