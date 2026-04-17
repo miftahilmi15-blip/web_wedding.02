@@ -15,17 +15,21 @@
             font-family: 'Montserrat', sans-serif; 
         }
 
-        /* --- EFEK BUNGA WARNA-WARNI --- */
+        /* --- COVER SCREEN (AWAL) --- */
+        #cover {
+            position: fixed; inset: 0; background: #880e4f;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100; cursor: pointer; color: white; transition: 0.8s;
+        }
+
+        /* --- EFEK BUNGA --- */
         .petals-container { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
         .petal {
-            position: absolute;
-            border-radius: 150% 0 150% 150%;
-            opacity: 0.7;
+            position: absolute; border-radius: 150% 0 150% 150%; opacity: 0.7;
             animation: fall linear infinite;
         }
-        /* Variasi Warna & Animasi */
-        .petal:nth-child(even) { background-color: #ffc0cb; } /* Pink */
-        .petal:nth-child(odd) { background-color: #ffffff; } /* Putih */
+        .petal:nth-child(even) { background-color: #ffc0cb; } 
+        .petal:nth-child(odd) { background-color: #ffffff; }
 
         @keyframes fall {
             0% { transform: translateY(-10vh) rotate(0deg) translateX(0px); opacity: 0; }
@@ -33,33 +37,23 @@
             100% { transform: translateY(110vh) rotate(360deg) translateX(50px); opacity: 0; }
         }
 
-        /* --- TEKS 3D LEBIH TAJAM --- */
+        /* --- TEKS 3D TAJAM --- */
         .text-overlay {
-            position: absolute; z-index: 20;
-            display: flex; flex-direction: column; align-items: center;
-            color: white; pointer-events: none; text-align: center;
+            position: absolute; z-index: 20; display: flex; flex-direction: column; 
+            align-items: center; color: white; pointer-events: none; text-align: center;
         }
-
         .name { 
             font-family: 'Great Vibes', cursive; font-size: 4.8rem;
-            /* Tajam: kombinasi bayangan hitam untuk kedalaman dan putih untuk highlight */
-            text-shadow: 
-                2px 2px 0px rgba(0,0,0,0.3), 
-                4px 4px 0px #880e4f, 
-                0px 0px 10px rgba(255,255,255,0.5);
-            -webkit-text-stroke: 1px #fff;
-            letter-spacing: 2px;
-            margin: 10px 0;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3), 4px 4px 0px #880e4f, 0px 0px 10px rgba(255,255,255,0.5);
+            -webkit-text-stroke: 1px #fff; letter-spacing: 2px; margin: 10px 0;
         }
-
-        .ampersand { font-size: 3rem; font-weight: 900; margin: 10px 0; }
+        .ampersand { font-size: 3rem; font-weight: 900; margin: 5px 0; }
         .parents { font-size: 0.7rem; letter-spacing: 6px; font-weight: 900; text-transform: uppercase; }
 
         /* --- FOTO --- */
         .photo-space { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; }
         .photo {
-            width: 160px; height: 160px;
-            background-size: cover; background-position: center top;
+            width: 160px; height: 160px; background-size: cover; background-position: center top;
             filter: drop-shadow(0 20px 15px rgba(0,0,0,0.4));
             opacity: 0; position: absolute;
         }
@@ -72,9 +66,13 @@
     </style>
 </head>
 <body>
+
+    <div id="cover" onclick="this.style.opacity='0'; setTimeout(()=>this.style.display='none', 800)">
+        <h1>Klik untuk Buka Undangan</h1>
+    </div>
+
     <div class="petals-container">
         <script>
-            // Membuat 15 kelopak secara otomatis
             for(let i=0; i<15; i++) {
                 let p = document.createElement('div');
                 p.className = 'petal';
