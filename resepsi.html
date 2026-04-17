@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Resepsi | Widya & Miftah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            background: radial-gradient(circle at center, #ad1457, #880e4f);
+            height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            font-family: 'Montserrat', sans-serif; color: white;
+            text-align: center; padding: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1); padding: 40px;
+            border-radius: 20px; backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 100%; max-width: 400px;
+        }
+
+        h2 { font-family: 'Great Vibes', cursive; font-size: 3rem; margin-bottom: 20px; }
+        .info-item { margin-bottom: 20px; }
+        .label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; }
+        .value { font-size: 1.2rem; font-weight: 600; margin-top: 5px; }
+
+        .btn-nav {
+            margin-top: 30px; display: flex; justify-content: center; gap: 10px;
+        }
+        .btn {
+            padding: 10px 20px; background: white; color: #880e4f;
+            text-decoration: none; border-radius: 50px; font-size: 0.8rem; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Resepsi</h2>
+        
+        <div class="info-item">
+            <p class="label">Tanggal</p>
+            <p class="value">Sabtu, 2 Mei 2026</p>
+        </div>
+
+        <div class="info-item">
+            <p class="label">Waktu</p>
+            <p class="value">08.00 WIB s.d Selesai</p>
+        </div>
+
+        <div class="info-item">
+            <p class="label">Lokasi</p>
+            <p class="value">Kediaman Mempelai Wanita</p>
+        </div>
+
+        <div class="btn-nav">
+            <a href="index.html" class="btn">&laquo; Kembali</a>
+            <a href="https://maps.google.com" target="_blank" class="btn">Buka Maps</a>
+        </div>
+    </div>
+
+</body>
+</html>
