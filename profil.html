@@ -2,8 +2,11 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Undangan Digital Widya & Miftah">
+    <meta property="og:description" content="Klik untuk melihat undangan pernikahan kami">
     <title>Undangan Digital | Widya & Miftah</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;900&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; outline: none; }
@@ -15,7 +18,7 @@
             font-family: 'Montserrat', sans-serif; 
         }
 
-        /* --- COVER SCREEN --- */
+        /* --- COVER --- */
         #cover {
             position: fixed; inset: 0; background: #880e4f;
             display: flex; justify-content: center; align-items: center;
@@ -23,7 +26,7 @@
             font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px;
         }
 
-        /* --- EFEK BUNGA --- */
+        /* --- BUNGA --- */
         .petals-container { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
         .petal {
             position: absolute; border-radius: 150% 0 150% 150%; opacity: 0.7;
@@ -40,9 +43,8 @@
 
         /* --- TEKS --- */
         .text-overlay {
-            position: absolute; z-index: 20;
-            display: flex; flex-direction: column; align-items: center;
-            color: white; pointer-events: none; text-align: center;
+            position: absolute; z-index: 20; display: flex; flex-direction: column; 
+            align-items: center; color: white; pointer-events: none; text-align: center;
         }
         .name { 
             font-family: 'Great Vibes', cursive; font-size: 4.8rem;
@@ -59,18 +61,22 @@
             filter: drop-shadow(0 20px 15px rgba(0,0,0,0.4));
             position: absolute; opacity: 0;
             animation-fill-mode: forwards;
+            background-color: #e91e63; /* Placeholder kalau gambar loading lama */
         }
-
         .widya-photo { background-image: url('widya.png'); animation: moveWidya 8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         .miftah-photo { background-image: url('gambar.png'); animation: moveMiftah 8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
-        @keyframes moveWidya { 
-            0% { transform: translateX(-200px); opacity: 0; } 
-            100% { transform: translateX(-80px); opacity: 1; } 
+        @keyframes moveWidya { 0% { transform: translateX(-200px); opacity: 0; } 100% { transform: translateX(-80px); opacity: 1; } }
+        @keyframes moveMiftah { 0% { transform: translateX(200px); opacity: 0; } 100% { transform: translateX(80px); opacity: 1; } }
+
+        /* --- NAVIGASI (DIPINDAHKAN KE CSS) --- */
+        #nav-footer {
+            position:fixed; bottom:30px; z-index: 50; opacity:0; transition: 1s;
         }
-        @keyframes moveMiftah { 
-            0% { transform: translateX(200px); opacity: 0; } 
-            100% { transform: translateX(80px); opacity: 1; } 
+        .btn-nav {
+            padding:12px 30px; background:white; color:#880e4f; text-decoration:none; 
+            border-radius:50px; font-weight:bold; letter-spacing:1px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -108,16 +114,12 @@
         <div class="photo miftah-photo"></div>
     </div>
 
-    <div id="nav-footer" style="position:fixed; bottom:30px; z-index: 50; opacity:0; transition: 1s;">
-        <a href="resepsi.html" style="padding:12px 30px; background:white; color:#880e4f; text-decoration:none; border-radius:50px; font-weight:bold; letter-spacing:1px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-            Lihat Resepsi &raquo;
-        </a>
+    <div id="nav-footer">
+        <a href="resepsi.html" class="btn-nav">Lihat Resepsi &raquo;</a>
     </div>
 
     <script>
-        setTimeout(() => {
-            document.getElementById('nav-footer').style.opacity = "1";
-        }, 4000);
+        setTimeout(() => { document.getElementById('nav-footer').style.opacity = "1"; }, 4000);
     </script>
 </body>
 </html>
